@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(#8c2f2f, #a33e3e);
+        height: 97vh;
+      }
+      .watch {
+        background: linear-gradient(217deg, rgb(234, 231, 231), rgb(71, 68, 68) 70.71%),
+          linear-gradient(127deg, rgb(84, 73, 73), rgb(81, 75, 75) 70.71%),
+          linear-gradient(336deg, rgb(87, 77, 77), rgb(0, 0, 0) 70.71%);
+        text-align: center;
+        width: 360px;
+        height: 360px;
+        border-radius: 50%;
+        border: 3px solid black;
+      }
+      .timer {
+        margin-top: 60px;
+        font-size: 55px;
+      }
+      .time {
+        margin-top: 23px;
+        margin-left: 57px;
+        font-size: 50px;
+        width: 240px;
+        border: 5px solid black;
+      }
+      button {
+        height: 45px;
+        width: 70px;
+        background: linear-gradient(rgb(63, 61, 61), rgb(117, 114, 123));
+        margin: 5px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:active {
+        height: 45px;
+        width: 70px;
+        background: linear-gradient(rgb(117, 114, 123), rgb(63, 61, 61));
+        margin: 5px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .btn {
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        margin-top: 30px;
+        margin-bottom: 50px;
+      }
+      .muted {
+        pointer-events: none;
+      }
+      .left {
+        position: absolute;
+        top: 166px;
+        left: 640px;
+        background-color: black;
+        width: 40px;
+        height: 80px;
+        border-radius: 5px;
+        z-index: -1;
+      }
+      .right {
+        position: absolute;
+        top: 166px;
+        right: 640px;
+        background-color: black;
+        width: 40px;
+        height: 80px;
+        border-radius: 5px;
+        z-index: -1;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div class="watch">
+        <p class="timer">TIMER .</p>
+      <p class="time"></p>
+      <div class="btn">
+        <button class="start js-start-button">Start</button>
+        <button class="stop js-stop-button">Stop</button>
+        <button class="reset js-reset-button">Reset</button>
+      </div>
+    </div>
+    <div class="left"></div>
+    <div class="right"></div>
+    <script>
+      const start = document.querySelector(".js-start-button");
+      const stop = document.querySelector(".js-stop-button");
+      const reset = document.querySelector(".js-reset-button");
+      const time = document.querySelector(".time");
+      let clearId;
+      let hour = 0;
+      let minute = 0;
+      let second = -1;
+      time.innerText =
+        `${hour}`.padStart(2, 0) +
+        ":" +
+        `${minute}`.padStart(2, 0) +
+        ":" +
+        `${second + 1}`.padStart(2, 0);
+
+      start.addEventListener("click", () => {
+        start.classList.add("muted");
+        clearId = setInterval(() => {
+          second++;
+          if (second >= 60) {
+            second = 0;
+            minute++;
+          }
+          if (minute >= 60) {
+            minute = 0;
+            hour++;
+          }
+          if (hour > 24) {
+            clearInterval(clearId);
+          }
+          time.innerText =
+            `${hour}`.padStart(2, 0) +
+            ":" +
+            `${minute}`.padStart(2, 0) +
+            ":" +
+            `${second}`.padStart(2, 0);
+        }, 1000);
+
+        stop.addEventListener("click", () => {
+          clearInterval(clearId);
+          clearId = undefined;
+          start.classList.remove("muted");
+        });
+      });
+
+      reset.addEventListener("click", () => {
+        clearInterval(clearId);
+        clearId = undefined;
+        start.classList.remove("muted");
+        second = 0;
+        minute = 0;
+        hour = 0;
+        time.innerText =
+          `${hour}`.padStart(2, 0) +
+          ":" +
+          `${minute}`.padStart(2, 0) +
+          ":" +
+          `${second}`.padStart(2, 0);
+      });
+    </script>
+  </body>
+</html>
